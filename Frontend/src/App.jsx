@@ -5,6 +5,7 @@ import Courses from './components/Courses';
 import MyCourse from './components/MyCourse';
 import About from './components/About';
 import Contact from './components/Contact';
+import ElevateUAuth from './components/ElevateUAuth'
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/mycourse" element={<MyCourse />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={< ElevateUAuth/>} />
         </Routes>
       </div>
     </Router>

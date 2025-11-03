@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import "./Home.css"
 const Home = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -23,9 +23,9 @@ const Home = () => {
             <Link to="/contact">Contact</Link>
           </nav>
           <div>
-            <button className="login-btn"><Link to="/courses" style={{color:'white',textDecoration:"None"
+            <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
             }}>Login</Link></button>
-            <button className="login-btn"><Link to="/courses" style={{color:'white',textDecoration:"None"
+            <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
             }}>SignUp</Link></button>
           </div>
         </div>

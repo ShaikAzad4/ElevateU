@@ -44,8 +44,7 @@ const Contact = () => {
             <Link to="/contact" className="active">Contact</Link>
           </nav>
           <div>
-            <button className="login-btn">Login</button>
-            <button className="login-btn">Signup</button>
+            <button className="login-btn">Logout</button>
           </div>
         </div>
       </header>

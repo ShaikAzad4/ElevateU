@@ -175,8 +175,7 @@ const Courses = () => {
             <Link to="/contact">Contact</Link>
           </nav>
           <div>
-            <button className="login-btn">Login</button>
-            <button className="login-btn">Signup</button>
+            <button className="login-btn">Logout</button>
           </div>
         </div>
       </header>
