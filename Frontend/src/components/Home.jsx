@@ -14,17 +14,17 @@ const Home = () => {
       <header className="header">
         <div className="container">
           <div className="logo">
-            <h2>ElevateU</h2>
+            <h2 className='elevateu'>ElevateU</h2>
           </div>
-          <nav className="nav">
+          {/* <nav className="nav">
             <Link to="/courses">Courses</Link>
             <Link to="/mycourse">MyCourse</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-          </nav>
-          <div>
+          </nav> */}
+          <div className='authbtns'>
             <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
-            }}>Login</Link></button>
+            }}>Login&nbsp;&nbsp;</Link></button>
             <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
             }}>SignUp</Link></button>
           </div>
@@ -40,7 +40,11 @@ const Home = () => {
             <button className="cta-button">Get Started</button>
           </div>
           
-          <div className="stats-section">
+          <div style={{display: "flex",
+              flexWrap: "wrap",
+              gap: "25px",
+              width: "100%",
+              justifyContent: "center",}}>
             <div className="stats-container">
               <div className="stat">
                 <h3>+38k</h3>
@@ -92,6 +96,10 @@ const Home = () => {
 
       <footer className="footer">
         <div className="container">
+          <div>
+            <Link to="/NoAbout" style={{color:"white",textDecoration:"none",marginRight:"20px"}}>About</Link>
+            <Link to="/NoContact" style={{color:"white",textDecoration:"none"}}>Contact</Link>
+          </div>
           <p>&copy; 2023 ElevateU. All rights reserved.</p>
         </div>
       </footer>

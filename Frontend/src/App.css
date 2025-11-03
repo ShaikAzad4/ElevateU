@@ -5,6 +5,36 @@
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+/* Add this to your main App.css or global styles */
+.page-transition {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideFromTop 0.5s ease forwards;
+}
+
+@keyframes slideFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override any existing bottom animations */
+.contact-hero,
+.contact-content {
+  animation: none !important;
+}
+
+/* Ensure the main container uses the transition */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
 html, body, #root, .app {
   height: 100%;
@@ -43,6 +73,20 @@ body {
   border-bottom: 3px solid #ff9800;
 }
 
+.elevateu{
+  position: relative;
+  right: 60px;
+}
+
+.authbtns{
+  position: relative;
+  left: 70px;
+}
+
+.connecting{
+  position: relative;
+  bottom: 50px;
+}
 .header .container {
   display: flex;
   justify-content: space-between;
@@ -118,7 +162,7 @@ body {
   width: 100%;
   position: relative;
   overflow: hidden;
-  min-height: 90vh;
+  height: 50vh !important;
 }
 
 .hero::before {
@@ -214,15 +258,8 @@ body {
   box-shadow: 0 8px 16px rgba(255, 109, 0, 0.4);
 }
 
-/* Stats Section */
-.stats-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  width: 100%;
-  justify-content: center;
-}
 
+/* State section */
 .stats-container {
   display: flex;
   gap: 50px;
