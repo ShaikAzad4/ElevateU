@@ -3,16 +3,27 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css'
 import App from './App.jsx'
-
+import { ClerkProvider } from '@clerk/clerk-react';
+import { dark } from '@clerk/themes';   
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
-    {/* <Router>
-      <Routes>
-        <Route path="/Nocontact" element={<NoAbout />} />
-        <Route path="/NoAbout" element={< NoContact/>} />
-      </Routes>
-    </Router> */}
+    <ClerkProvider
+      publishableKey={PUBLISHABLE_KEY}
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: '#7c3aed',
+          borderRadius: '12px',
+        },
+        layout: {
+          socialButtonsVariant: 'iconButton',
+          shimmer: true,
+        },
+      }}
+    >
+      <App />
+    </ClerkProvider>
   </StrictMode>,
 )

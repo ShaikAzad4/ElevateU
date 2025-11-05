@@ -1,0 +1,309 @@
+/* ===================================
+   Course Details – Unified Dark Theme
+   =================================== */
+
+:root {
+  --bg: #0f1217;              /* overall page background */
+  --surface: #151b24;         /* card / section background */
+  --muted: #9aa6b2;
+  --text: #e9eef7;
+  --brand: #6aa1ff;
+  --brand-strong: #2f7aff;
+  --border: #202b39;
+  --focus: #9cc2ff;
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* Global full-page dark fix */
+html,
+body {
+  background: var(--bg) !important;
+  color: var(--text);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+/* Force all direct wrappers to inherit dark bg */
+#root,
+#app,
+main {
+  background: var(--bg) !important;
+}
+
+/* Main container */
+.cd-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  background: var(--bg);
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* ---------------- Header ---------------- */
+.cd-header {
+  background: var(--bg);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.cd-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.cd-breadcrumb-link {
+  color: var(--muted);
+  text-decoration: none;
+}
+.cd-breadcrumb-link:hover {
+  color: var(--text);
+}
+.cd-breadcrumb-sep {
+  opacity: 0.6;
+}
+.cd-breadcrumb-current {
+  color: var(--text);
+}
+
+.cd-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.cd-title {
+  font-size: 26px;
+  margin: 0 0 4px;
+}
+.cd-sub {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------------- Tabs ---------------- */
+.cd-tabs {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.cd-tab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cd-tab.active {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* ---------------- Cards ---------------- */
+.cd-content {
+  padding-top: 20px;
+}
+
+.cd-section {
+  display: grid;
+  gap: 18px;
+}
+
+.cd-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.cd-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.cd-chip {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+}
+
+.cd-item-title {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* ---------------- Text Areas ---------------- */
+.cd-textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  background: #101621;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  line-height: 1.5;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.cd-textarea::placeholder {
+  color: #7f8a9b;
+}
+.cd-textarea:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(156, 194, 255, 0.18);
+}
+
+/* ---------------- Assignment Fields ---------------- */
+.cd-label {
+  display: block;
+  margin: 12px 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.cd-input {
+  width: 100%;
+  background: #101621;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+.cd-input:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(156, 194, 255, 0.18);
+}
+
+/* ---------------- Columns ---------------- */
+.cd-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 8px 0 4px;
+}
+.cd-h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.cd-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cd-list-item {
+  padding: 8px 10px;
+  background: #101621;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+/* ---------------- Buttons ---------------- */
+.cd-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cd-btn {
+  border: 1px solid var(--border);
+  background: #101723;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+.cd-btn:hover {
+  background: #131c2a;
+}
+.cd-btn.primary {
+  background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+  border-color: transparent;
+}
+.cd-btn.ghost {
+  background: transparent;
+}
+
+.cd-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  padding-top: 4px;
+}
+
+/* ---------------- Utilities ---------------- */
+.cd-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.cd-brief {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+a {
+  color: var(--brand);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--brand-strong);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 860px) {
+  .cd-header-main {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .cd-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .cd-title {
+    font-size: 22px;
+  }
+  .cd-item {
+    padding: 14px;
+  }
+  .cd-tab {
+    padding: 8px 10px;
+  }
+}

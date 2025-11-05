@@ -25,7 +25,7 @@ const Home = () => {
           <div className='authbtns'>
             <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
             }}>Login&nbsp;&nbsp;</Link></button>
-            <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
+            <button className="login-btn"><Link to="/sign-up" style={{color:'white',textDecoration:"None"
             }}>SignUp</Link></button>
           </div>
         </div>

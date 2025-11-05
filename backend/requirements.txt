@@ -1,0 +1,13 @@
+python-dotenv
+langchain-google-genai
+langchain
+flask
+langgraph
+flask_cors
+plotly
+networkx
+requests
+typing-extensions
+langchain-core
+langchain-google-genai
+google-generativeai
