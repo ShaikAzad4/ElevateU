@@ -1,3 +1,50 @@
+
+/* Header Styles */
+/* grid layout for header (logo | nav | user) */
+.header .container.header-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+
+/* right side (auth buttons / Clerk avatar) */
+.header-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* optional label next to avatar */
+.user-label {
+  color: #5d4037;
+  font-weight: 600;
+}
+
+/* keep nav centered in the middle column */
+.nav {
+  justify-self: center;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* responsive override for small screens */
+@media (max-width: 768px) {
+  .header .container.header-bar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo headerRight"
+      "nav  nav";
+    row-gap: 10px;
+  }
+  .logo { grid-area: logo; }
+  .nav { grid-area: nav; justify-self: center; }
+  .header-right { grid-area: headerRight; }
+}
+
 /* Courses.css - Courses Page Styles */
 .courses-hero {
   padding: 100px 0;

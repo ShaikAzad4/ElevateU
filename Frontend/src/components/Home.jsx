@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
+
 import "./Home.css"
 const Home = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-
+  const { isLoaded, isSignedIn, user } = useUser();
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
@@ -13,8 +16,8 @@ const Home = () => {
       {/* Header Section */}
       <header className="header">
         <div className="container">
-          <div className="logo">
-            <h2 className='elevateu'>ElevateU</h2>
+          <div className="logo" style={{cursor:"pointer"}}>
+            <Link to="/"><h2 className='elevateu'>ElevateU</h2></Link>
           </div>
           {/* <nav className="nav">
             <Link to="/courses">Courses</Link>
@@ -22,11 +25,29 @@ const Home = () => {
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
           </nav> */}
-          <div className='authbtns'>
-            <button className="login-btn"><Link to="/login" style={{color:'white',textDecoration:"None"
-            }}>Login&nbsp;&nbsp;</Link></button>
-            <button className="login-btn"><Link to="/sign-up" style={{color:'white',textDecoration:"None"
-            }}>SignUp</Link></button>
+          {/* 👇 Add this inside header > .container, replacing your old auth blocks */}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "12px" }}>
+            <SignedOut>
+              {/* Visible only when logged out */}
+              <div className='authbtns'>
+                <button className="login-btn">
+                  <Link to="/login" style={{ color:'white', textDecoration:'none' }}>Login&nbsp;&nbsp;</Link>
+                </button>
+                <button className="login-btn">
+                  <Link to="/sign-up" style={{ color:'white', textDecoration:'none' }}>SignUp</Link>
+                </button>
+              </div>
+            </SignedOut>
+
+            <SignedIn>
+              {/* Visible only when logged in */}
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ color: "white", fontWeight: 500 }}>
+                  {user?.fullName || user?.primaryEmailAddress?.emailAddress || "Account"}
+                </span>
+                <UserButton signOutRedirectUrl="/" />
+              </div>
+            </SignedIn>
           </div>
         </div>
       </header>

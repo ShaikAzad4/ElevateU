@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Courses.css";
+import { useAuth } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 
 const Courses = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
-
+  const { user, isSignedIn, isLoaded } = useUser();
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
@@ -171,20 +173,36 @@ const Courses = () => {
   return (
     <div className="app">
       <header className="header">
-        <div className="container">
-          <div className="logo">
-            <h2>ElevateU</h2>
+        <div className="container header-bar">
+          <div className="logo" style={{cursor:"pointer"}}>
+            <Link to="/"><h2 className='elevateu'>ElevateU</h2></Link>
           </div>
+
           <nav className="nav">
-            <Link to="/courses" className="active">
-              Courses
-            </Link>
+            <Link to="/courses">Courses</Link>
             <Link to="/mycourse">MyCourse</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
           </nav>
-          <div>
-            <button className="login-btn">Logout</button>
+
+          <div className="header-right">
+            <SignedOut>
+              <div className='authbtns'>
+                <button className="login-btn">
+                  <Link to="/login" style={{ color:'white', textDecoration:'none' }}>Login&nbsp;&nbsp;</Link>
+                </button>
+                <button className="login-btn">
+                  <Link to="/sign-up" style={{ color:'white', textDecoration:'none' }}>SignUp</Link>
+                </button>
+              </div>
+            </SignedOut>
+
+            <SignedIn>
+              <span className="user-label">
+                {user?.fullName || user?.primaryEmailAddress?.emailAddress || "Account"}
+              </span>
+              <UserButton signOutRedirectUrl="/" />
+            </SignedIn>
           </div>
         </div>
       </header>

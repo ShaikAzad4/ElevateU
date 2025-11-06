@@ -43,12 +43,12 @@ body {
   border-bottom: 3px solid #ff9800;
 }
 
-.header .container {
-  display: flex;
-  justify-content: space-between;
+/* NEW: grid layout for header (logo | nav | user) */
+.header .container.header-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
+  gap: 16px;
 }
 
 .logo h2 {
@@ -57,11 +57,13 @@ body {
   font-size: 1.8rem;
 }
 
+/* center the nav in the middle column */
 .nav {
+  justify-self: center;
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
 }
 
 .nav a {
@@ -99,6 +101,14 @@ body {
   width: 100%;
 }
 
+/* right side (auth buttons or UserButton) */
+.header-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .login-btn {
   background: linear-gradient(135deg, #ff9800, #ff6d00);
   color: white;
@@ -118,6 +128,8 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(255, 109, 0, 0.3);
 }
+
+.user-label { color: #5d4037; font-weight: 600; }
 
 /* Contact Hero Section */
 .contact-hero {
@@ -383,14 +395,8 @@ body {
 }
 
 @keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .chatbot-header {
@@ -496,208 +502,83 @@ body {
 
 /* Enhanced Responsive Design */
 @media (max-width: 1024px) {
-  .contact-hero .hero-content h1 {
-    font-size: 2.5rem;
-  }
-  
-  .contact-grid {
-    gap: 40px;
-  }
+  .contact-hero .hero-content h1 { font-size: 2.5rem; }
+  .contact-grid { gap: 40px; }
 }
 
 @media (max-width: 768px) {
-  .header .container {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
+  /* stack header on small screens */
+  .header .container.header-bar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo headerRight"
+      "nav  nav";
+    row-gap: 10px;
   }
-  
-  .nav {
-    gap: 15px;
-  }
-  
-  .contact-hero {
-    padding: 80px 0 40px;
-  }
-  
-  .contact-hero .hero-content h1 {
-    font-size: 2.2rem;
-  }
-  
-  .contact-hero .hero-content p {
-    font-size: 1rem;
-  }
-  
-  .contact-content {
-    padding: 40px 0;
-  }
-  
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  
-  .contact-info h2 {
-    font-size: 1.8rem;
-    text-align: center;
-  }
-  
-  .contact-form-container {
-    padding: 30px;
-  }
-  
-  .contact-form-container h2 {
-    font-size: 1.6rem;
-  }
-  
-  .chatbot-window {
-    width: calc(100vw - 40px);
-    right: 20px;
-  }
+  .logo { grid-area: logo; }
+  .nav { grid-area: nav; justify-self: center; }
+  .header-right { grid-area: headerRight; }
+
+  .nav { gap: 15px; }
+
+  .contact-hero { padding: 80px 0 40px; }
+  .contact-hero .hero-content h1 { font-size: 2.2rem; }
+  .contact-hero .hero-content p { font-size: 1rem; }
+
+  .contact-content { padding: 40px 0; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+
+  .contact-info h2 { font-size: 1.8rem; text-align: center; }
+  .contact-form-container { padding: 30px; }
+  .contact-form-container h2 { font-size: 1.6rem; }
+
+  .chatbot-window { width: calc(100vw - 40px); right: 20px; }
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 0 15px;
-  }
-  
-  .logo h2 {
-    font-size: 1.5rem;
-  }
-  
-  .nav {
-    gap: 12px;
-  }
-  
-  .nav a {
-    font-size: 0.9rem;
-  }
-  
-  .login-btn {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    margin-left: 8px;
-  }
-  
-  .contact-hero {
-    padding: 60px 0 30px;
-  }
-  
-  .contact-hero .hero-content h1 {
-    font-size: 1.8rem;
-  }
-  
-  .contact-content {
-    padding: 30px 0;
-  }
-  
-  .contact-info h2 {
-    font-size: 1.6rem;
-  }
-  
-  .contact-item {
-    padding: 16px;
-    gap: 12px;
-  }
-  
-  .contact-icon {
-    width: 40px;
-    height: 40px;
-    padding: 8px;
-    font-size: 1rem;
-  }
-  
-  .contact-details h3 {
-    font-size: 1rem;
-  }
-  
-  .contact-details p {
-    font-size: 0.9rem;
-  }
-  
-  .contact-form-container {
-    padding: 25px 20px;
-  }
-  
-  .contact-form-container h2 {
-    font-size: 1.4rem;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    padding: 10px 14px;
-    font-size: 0.9rem;
-  }
-  
-  .submit-btn {
-    padding: 12px 24px;
-    font-size: 0.95rem;
-  }
-  
-  .chatbot-logo {
-    width: 55px;
-    height: 55px;
-    bottom: 20px;
-    right: 20px;
-  }
-  
-  .chatbot-icon {
-    font-size: 1.3rem;
-  }
-  
-  .chatbot-window {
-    height: 380px;
-    bottom: 85px;
-  }
+  .container { padding: 0 15px; }
+  .logo h2 { font-size: 1.5rem; }
+  .nav { gap: 12px; }
+  .nav a { font-size: 0.9rem; }
+  .login-btn { padding: 8px 16px; font-size: 0.9rem; margin-left: 8px; }
+
+  .contact-hero { padding: 60px 0 30px; }
+  .contact-hero .hero-content h1 { font-size: 1.8rem; }
+  .contact-content { padding: 30px 0; }
+
+  .contact-info h2 { font-size: 1.6rem; }
+  .contact-item { padding: 16px; gap: 12px; }
+  .contact-icon { width: 40px; height: 40px; padding: 8px; font-size: 1rem; }
+  .contact-details h3 { font-size: 1rem; }
+  .contact-details p { font-size: 0.9rem; }
+
+  .contact-form-container { padding: 25px 20px; }
+  .contact-form-container h2 { font-size: 1.4rem; }
+  .form-group input, .form-group textarea { padding: 10px 14px; font-size: 0.9rem; }
+  .submit-btn { padding: 12px 24px; font-size: 0.95rem; }
+
+  .chatbot-logo { width: 55px; height: 55px; bottom: 20px; right: 20px; }
+  .chatbot-icon { font-size: 1.3rem; }
+  .chatbot-window { height: 380px; bottom: 85px; }
 }
 
 /* Extra Small Devices */
 @media (max-width: 360px) {
-  .contact-hero .hero-content h1 {
-    font-size: 1.6rem;
-  }
-  
-  .contact-info h2,
-  .contact-form-container h2 {
-    font-size: 1.4rem;
-  }
-  
-  .contact-item {
-    padding: 14px 12px;
-  }
-  
-  .contact-icon {
-    width: 36px;
-    height: 36px;
-    padding: 7px;
-    font-size: 0.9rem;
-  }
-  
-  .contact-form-container {
-    padding: 20px 16px;
-  }
+  .contact-hero .hero-content h1 { font-size: 1.6rem; }
+  .contact-info h2, .contact-form-container h2 { font-size: 1.4rem; }
+  .contact-item { padding: 14px 12px; }
+  .contact-icon { width: 36px; height: 36px; padding: 7px; font-size: 0.9rem; }
+  .contact-form-container { padding: 20px 16px; }
 }
 
 /* High-resolution displays */
 @media (min-width: 1400px) {
-  .container {
-    max-width: 1320px;
-  }
+  .container { max-width: 1320px; }
 }
 
 /* Print Styles */
 @media print {
-  .chatbot-logo,
-  .chatbot-window {
-    display: none;
-  }
-  
-  .header {
-    box-shadow: none;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .contact-hero {
-    background: none;
-  }
+  .chatbot-logo, .chatbot-window { display: none; }
+  .header { box-shadow: none; border-bottom: 1px solid #ccc; }
+  .contact-hero { background: none; }
 }

@@ -34,9 +34,9 @@ const NoContact = () => {
     <div className="app">
         <header className="header">
             <div className="container">
-                <div className="logo">
-                <h2 className='elevateu'>ElevateU</h2>
-                </div>
+            <div className="logo" style={{cursor:"pointer"}}>
+              <Link to="/"><h2 className='elevateu'>ElevateU</h2></Link>
+            </div>
                 {/* <nav className="nav">
                 <Link to="/courses">Courses</Link>
                 <Link to="/mycourse">MyCourse</Link>

@@ -32,91 +32,49 @@ body {
 }
 
 /* Header Styles */
-.header {
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(255, 152, 0, 0.1);
-  padding: 15px 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  border-bottom: 3px solid #ff9800;
-}
-
-.header .container {
-  display: flex;
-  justify-content: space-between;
+/* grid layout for header (logo | nav | user) */
+.header .container.header-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
+  gap: 16px;
 }
 
-.logo h2 {
-  color: #ff6d00;
-  font-weight: 700;
-  font-size: 1.8rem;
-}
-
-.nav {
+/* right side (auth buttons / Clerk avatar) */
+.header-right {
+  justify-self: end;
   display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
+  gap: 12px;
 }
 
-.nav a {
-  text-decoration: none;
+/* optional label next to avatar */
+.user-label {
   color: #5d4037;
-  font-weight: 500;
-  transition: color 0.3s;
-  font-size: 1rem;
-  position: relative;
-  padding: 5px 0;
-}
-
-.nav a:hover {
-  color: #ff6d00;
-}
-
-.nav a.active {
-  color: #ff6d00;
   font-weight: 600;
 }
 
-.nav a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 0;
-  background-color: #ff6d00;
-  transition: width 0.3s;
+/* keep nav centered in the middle column */
+.nav {
+  justify-self: center;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.nav a:hover::after,
-.nav a.active::after {
-  width: 100%;
-}
-
-.login-btn {
-  background: linear-gradient(135deg, #ff9800, #ff6d00);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 1rem;
-  box-shadow: 0 2px 4px rgba(255, 109, 0, 0.2);
-  margin-left: 10px;
-}
-
-.login-btn:hover {
-  background: linear-gradient(135deg, #ff6d00, #ff9800);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 109, 0, 0.3);
+/* responsive override for small screens */
+@media (max-width: 768px) {
+  .header .container.header-bar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo headerRight"
+      "nav  nav";
+    row-gap: 10px;
+  }
+  .logo { grid-area: logo; }
+  .nav { grid-area: nav; justify-self: center; }
+  .header-right { grid-area: headerRight; }
 }
 
 /* About Hero Section */
