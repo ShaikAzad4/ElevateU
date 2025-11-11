@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState} from "react";
 import "./AdminPage.css";
+import { Link } from "react-router-dom";
 
 const SEED = [
   {
@@ -105,9 +106,10 @@ export default function AdminPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+          <Link to="/addcourse">
+        <button className="btn btn-primary">
             + Create Course
-          </button>
+          </button></Link>
         </div>
       </header>
 
@@ -202,104 +204,6 @@ export default function AdminPage() {
           </section>
         )}
       </main>
-
-      {/* Create Modal */}
-      {showCreate && (
-        <div className="modal-backdrop" onClick={() => setShowCreate(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Create Course</h2>
-            <form onSubmit={handleCreate} className="form">
-              <div className="row">
-                <div className="field">
-                  <label className="label">Title</label>
-                  <input
-                    className="input"
-                    required
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  />
-                </div>
-                <div className="field">
-                  <label className="label">Instructor</label>
-                  <input
-                    className="input"
-                    required
-                    value={form.instructor}
-                    onChange={(e) => setForm({ ...form, instructor: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="field">
-                  <label className="label">Lessons</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="input"
-                    value={form.lessons}
-                    onChange={(e) => setForm({ ...form, lessons: e.target.value })}
-                  />
-                </div>
-                <div className="field">
-                  <label className="label">Students</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="input"
-                    value={form.students}
-                    onChange={(e) => setForm({ ...form, students: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="field">
-                  <label className="label">Price (USD)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="input"
-                    value={form.price}
-                    onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  />
-                </div>
-                <div className="field">
-                  <label className="label">Status</label>
-                  <select
-                    className="select"
-                    value={form.status}
-                    onChange={(e) => setForm({ ...form, status: e.target.value })}
-                  >
-                    <option>Active</option>
-                    <option>Draft</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="field">
-                  <label className="label">Created At</label>
-                  <input
-                    type="date"
-                    className="input"
-                    value={form.createdAt}
-                    onChange={(e) => setForm({ ...form, createdAt: e.target.value })}
-                  />
-                </div>
-                <div className="field"></div>
-              </div>
-
-              <div className="modal-actions">
-                <button type="button" className="btn btn-ghost" onClick={() => setShowCreate(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">Create</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

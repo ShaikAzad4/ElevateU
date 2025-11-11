@@ -150,30 +150,6 @@ const NoContact = () => {
           <p>&copy; 2023 ElevateU. All rights reserved.</p>
         </div>
       </footer>
-
-      <div className="chatbot-logo" onClick={toggleChat}>
-        <div className="chatbot-icon">
-          <span>💬</span>
-        </div>
-      </div>
-
-      {isChatOpen && (
-        <div className="chatbot-window">
-          <div className="chatbot-header">
-            <h3>ElevateU Assistant</h3>
-            <button className="close-chat" onClick={toggleChat}>×</button>
-          </div>
-          <div className="chatbot-messages">
-            <div className="message bot-message">
-              <p>Need immediate help? I can answer your questions right now!</p>
-            </div>
-          </div>
-          <div className="chatbot-input">
-            <input type="text" placeholder="How can I help you?" />
-            <button className="send-button">Send</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -9,7 +9,7 @@ export default function Response() {
     (async () => {
       if (!isSignedIn) return;
       const token = await getToken();
-      await fetch("http://127.0.0.1:5000/api/echo", {
+      await fetch("http://127.0.0.1:5000/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

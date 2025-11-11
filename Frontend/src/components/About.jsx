@@ -133,29 +133,6 @@ const About = () => {
         </div>
       </footer>
 
-      <div className="chatbot-logo" onClick={toggleChat}>
-        <div className="chatbot-icon">
-          <span>💬</span>
-        </div>
-      </div>
-
-      {isChatOpen && (
-        <div className="chatbot-window">
-          <div className="chatbot-header">
-            <h3>ElevateU Assistant</h3>
-            <button className="close-chat" onClick={toggleChat}>×</button>
-          </div>
-          <div className="chatbot-messages">
-            <div className="message bot-message">
-              <p>Want to know more about us? Ask me anything!</p>
-            </div>
-          </div>
-          <div className="chatbot-input">
-            <input type="text" placeholder="Ask about ElevateU..." />
-            <button className="send-button">Send</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

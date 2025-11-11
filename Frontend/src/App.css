@@ -71,6 +71,9 @@ body {
   z-index: 100;
   width: 100%;
   border-bottom: 3px solid #ff9800;
+  height: 94px;
+  display: flex;
+  justify-items: center;
 }
 
 .elevateu{
@@ -89,6 +92,7 @@ body {
 }
 .header .container {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   align-items: center;
 }

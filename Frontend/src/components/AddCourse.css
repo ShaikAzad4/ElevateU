@@ -1,0 +1,80 @@
+.add-course-container {
+  max-width: 600px;
+  margin: 80px auto;
+  background-color: #fff7ef;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(255, 152, 0, 0.2);
+  padding: 40px;
+  font-family: "Poppins", sans-serif;
+}
+
+.form-title {
+  text-align: center;
+  color: #5d4037;
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.add-course-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: #5d4037;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 10px 14px;
+  border: 1.5px solid #ff9800;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #ffb84d;
+  box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+}
+
+.submit-btn {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  align-self: center;
+  width: 50%;
+}
+
+.submit-btn:hover {
+  background-color: #e68900;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .add-course-container {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}

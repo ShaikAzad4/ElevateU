@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from "@clerk/clerk-react";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
@@ -7,28 +7,71 @@ import "./Home.css"
 const Home = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+  const [sameUser,setSameUser] =useState(false)
+  const [mongoData,setMongoData] = useState([])
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
 
+    useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      const clerkId = user.id;
+      const email = user?.primaryEmailAddress?.emailAddress || "";
+      const name  = user?.fullName || "";
+
+      // IMPORTANT: use localhost to match CORS, and use the sync response directly
+      fetch("http://localhost:5000/api/user/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clerk_id: clerkId, email, name }),
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            const j = await res.json().catch(() => ({}));
+            throw new Error(j?.error || "Sync failed");
+          }
+          return res.json();
+        })
+        .then((savedUser) => {
+          console.log("Synced/loaded Mongo user:", savedUser);
+          setMongoData(savedUser); // <- no immediate GET; trust the saved row
+        })
+        .catch((err) => console.error("Error syncing user:", err));
+    }
+  }, [isLoaded, isSignedIn, user]);
+
+  // ---- access rule (unchanged) ----
+  const norm = (s) => (s || "").trim().toLowerCase();
+  const clerkName =
+    user?.fullName ||
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
+    user?.username || "";
+
+  const showAdminLink =
+    isLoaded &&
+    isSignedIn &&
+    user &&
+    mongoData &&
+    user.id === mongoData.clerk_id &&               // IDs match
+    norm(clerkName) === norm(mongoData.name) &&     // names match
+    norm(mongoData.name) === "admin";               // name is admin
+
   return (
     <div className="app">
-      {/* Header Section */}
       <header className="header">
         <div className="container">
           <div className="logo" style={{cursor:"pointer"}}>
             <Link to="/"><h2 className='elevateu'>ElevateU</h2></Link>
           </div>
-          {/* <nav className="nav">
-            <Link to="/courses">Courses</Link>
-            <Link to="/mycourse">MyCourse</Link>
-            <Link to="/about">About</Link>
-            <Link to="/contact">Contact</Link>
-          </nav> */}
-          {/* 👇 Add this inside header > .container, replacing your old auth blocks */}
+
+          {showAdminLink && (
+            <nav>
+              <Link to="/admin">Admin Page</Link>
+            </nav>
+          )}
+
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "12px" }}>
             <SignedOut>
-              {/* Visible only when logged out */}
               <div className='authbtns'>
                 <button className="login-btn">
                   <Link to="/login" style={{ color:'white', textDecoration:'none' }}>Login&nbsp;&nbsp;</Link>
@@ -40,7 +83,6 @@ const Home = () => {
             </SignedOut>
 
             <SignedIn>
-              {/* Visible only when logged in */}
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span style={{ color: "white", fontWeight: 500 }}>
                   {user?.fullName || user?.primaryEmailAddress?.emailAddress || "Account"}
@@ -58,7 +100,7 @@ const Home = () => {
           <div className="hero-content">
             <h1>Connecting Learners to Knowledge</h1>
             <p>An integrated learning hub helping students gain practical knowledge and interview experience to stand out in their careers</p>
-            <button className="cta-button">Get Started</button>
+            <Link to="/login"><button className="cta-button">Get Started</button></Link>
           </div>
           
           <div style={{display: "flex",
@@ -125,35 +167,9 @@ const Home = () => {
         </div>
       </footer>
 
-      {/* Chatbot */}
-      <div className="chatbot-logo" onClick={toggleChat}>
-        <div className="chatbot-icon">
-          <span>💬</span>
-        </div>
-      </div>
-
-      {isChatOpen && (
-        <div className="chatbot-window">
-          <div className="chatbot-header">
-            <h3>ElevateU Assistant</h3>
-            <button className="close-chat" onClick={toggleChat}>×</button>
-          </div>
-          <div className="chatbot-messages">
-            <div className="message bot-message">
-              <p>Hello! I'm your ElevateU assistant. How can I help you today?</p>
-            </div>
-          </div>
-          <div className="chatbot-input">
-            <input 
-              type="text" 
-              placeholder="Ask me anything about courses, pricing, or support..."
-            />
-            <button className="send-button">Send</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 export default Home;
+
