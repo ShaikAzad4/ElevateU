@@ -307,17 +307,18 @@
 
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Courses.css";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 const Courses = () => {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter] = useState("all");
   
 const { user, isSignedIn } = useUser();
 const navigate = useNavigate();
+const location = useLocation();
 const [enrolling, setEnrolling] = useState(null);
 
 
@@ -329,7 +330,7 @@ const [enrolling, setEnrolling] = useState(null);
     let ignore = false;
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/courses`);
+        const res = await fetch(`${API_BASE}/courses`);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to load courses");
 
@@ -388,7 +389,17 @@ const handleEnroll = async (courseId) => {
   setEnrolling(courseId); // show loading for this course
 
   try {
-    const res = await fetch(`${API_BASE}/api/enroll`, {
+    const name =
+      user.fullName || `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim();
+    const email = user.primaryEmailAddress?.emailAddress || null;
+
+    await fetch(`${API_BASE}/user/sync`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clerk_id: user.id, email, name }),
+    });
+
+    const res = await fetch(`${API_BASE}/enroll`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -401,8 +412,8 @@ const handleEnroll = async (courseId) => {
 
     if (!res.ok) throw new Error(data?.error || "Failed to enroll");
 
-    // redirect to MyCourse page on success
-    navigate("/mycourse");
+    // redirect to MyCourse page on success and highlight MyCourse nav
+    navigate("/mycourse", { state: { highlightMyCourse: true } });
   } catch (err) {
     alert(err.message || "Failed to enroll");
   } finally {
@@ -422,10 +433,10 @@ const handleEnroll = async (courseId) => {
           </div>
 
           <nav className="nav">
-            <Link to="/courses">Courses</Link>
-            <Link to="/mycourse">MyCourse</Link>
-            <Link to="/about">About</Link>
-            <Link to="/contact">Contact</Link>
+            <Link to="/courses" className={location.pathname.startsWith("/courses") ? "active" : undefined}>Courses</Link>
+            <Link to="/mycourse" className={location.pathname.startsWith("/mycourse") ? "active" : undefined}>MyCourse</Link>
+            <Link to="/about" className={location.pathname.startsWith("/about") ? "active" : undefined}>About</Link>
+            <Link to="/contact" className={location.pathname.startsWith("/contact") ? "active" : undefined}>Contact</Link>
           </nav>
 
           <div className="header-right">

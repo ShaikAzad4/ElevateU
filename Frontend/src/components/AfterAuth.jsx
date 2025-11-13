@@ -36,6 +36,7 @@
 import { useEffect } from "react";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 export default function AfterAuth() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -49,14 +50,14 @@ export default function AfterAuth() {
       const token = await getToken().catch(() => null);
       try {
         // Create/sync user in backend
-        await fetch("http://localhost:5000/api/users", {
+        await fetch(`${API_BASE}/user/sync`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({
-            id: user.id,
+            clerk_id: user.id,
             email: user.primaryEmailAddress?.emailAddress || null,
             name:
               user.fullName ||

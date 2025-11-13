@@ -172,18 +172,35 @@
 
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./MyCourse.css";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 const MyCourse = () => {
   const { user, isSignedIn } = useUser();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
+  const [highlightNav, setHighlightNav] = useState(Boolean(location.state?.highlightMyCourse));
+  const [progress, setProgress] = useState({ java: null, python: null });
+  const handleTutorChat = (title) => {
+    const t = String(title || "").toLowerCase();
+    const course = t.includes("java") ? "java" : t.includes("python") ? "python" : "";
+    navigate(`/ai-tutor${course ? `?course=${course}` : ""}`);
+  };
+
+  useEffect(() => {
+    if (location.state?.highlightMyCourse) {
+      setHighlightNav(true);
+      const t = setTimeout(() => setHighlightNav(false), 4000);
+      return () => clearTimeout(t);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!isSignedIn || !user?.id) {
@@ -194,7 +211,7 @@ const MyCourse = () => {
     (async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/api/my-courses?clerk_id=${encodeURIComponent(user.id)}`
+          `${API_BASE}/my-courses?clerk_id=${encodeURIComponent(user.id)}`
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to load courses");
@@ -208,6 +225,19 @@ const MyCourse = () => {
     return () => {
       cancelled = true;
     };
+  }, [isSignedIn, user?.id]);
+
+  useEffect(() => {
+    if (!isSignedIn || !user?.id) return;
+    const ac = new AbortController();
+    (async () => {
+      const [j, p] = await Promise.all([
+        fetch(`/progress/java/topics?clerk_id=${encodeURIComponent(user.id)}`, { signal: ac.signal }).then(r => r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))).catch(() => null),
+        fetch(`/progress/python/topics?clerk_id=${encodeURIComponent(user.id)}`, { signal: ac.signal }).then(r => r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))).catch(() => null),
+      ]);
+      setProgress({ java: j?.percent ?? null, python: p?.percent ?? null });
+    })();
+    return () => ac.abort();
   }, [isSignedIn, user?.id]);
 
   const stats = useMemo(() => {
@@ -229,10 +259,13 @@ const MyCourse = () => {
           </div>
 
           <nav className="nav">
-            <Link to="/courses">Courses</Link>
-            <Link to="/mycourse">MyCourse</Link>
-            <Link to="/about">About</Link>
-            <Link to="/contact">Contact</Link>
+            <Link to="/courses" className={location.pathname.startsWith("/courses") ? "active" : undefined}>Courses</Link>
+            <Link to="/mycourse" className={[
+              location.pathname.startsWith("/mycourse") ? "active" : null,
+              highlightNav ? "highlight" : null,
+            ].filter(Boolean).join(" ")}>MyCourse</Link>
+            <Link to="/about" className={location.pathname.startsWith("/about") ? "active" : undefined}>About</Link>
+            <Link to="/contact" className={location.pathname.startsWith("/contact") ? "active" : undefined}>Contact</Link>
           </nav>
 
           <div className="header-right">
@@ -308,28 +341,59 @@ const MyCourse = () => {
 
                         <div className="course-details">
                           <h3>{c.title}</h3>
-                          <p>Instructor: {c.tutor}</p>
+                          <p>Instructor: Prof. Sujan Reddy</p>
 
                           <div className="progress-container">
-                            {/* Placeholder progress UI (until you track progress) */}
                             <div className="progress-bar">
-                              <div className="progress-fill" style={{ width: `0%` }}></div>
+                              <div
+                                className="progress-fill"
+                                style={{
+                                  width: `${(() => {
+                                    const t = String(c.title || "").toLowerCase();
+                                    if (t.includes("java")) return progress.java ?? 0;
+                                    if (t.includes("python")) return progress.python ?? 0;
+                                    return 0;
+                                  })()}%`,
+                                }}
+                              ></div>
                             </div>
-                            <span className="progress-text">0% Complete</span>
+                            <span className="progress-text">{(() => {
+                              const t = String(c.title || "").toLowerCase();
+                              if (t.includes("java")) return `${progress.java ?? 0}% Complete`;
+                              if (t.includes("python")) return `${progress.python ?? 0}% Complete`;
+                              return `0% Complete`;
+                            })()}</span>
                           </div>
 
-                          <div className="course-next">
-                            <p>Duration: {c.duration}</p>
-                            <p>
-                              Enrolled on:{" "}
-                              {c.enrolled_at ? new Date(c.enrolled_at).toLocaleString() : "—"}
-                            </p>
+                          <div className="course-next two-col">
+                            <div className="col labels">
+                              <p>Instructor:</p>
+                              <p>Duration:</p>
+                              <p>Topics:</p>
+                              <p>Enrolled:</p>
+                            </div>
+                            <div className="col values">
+                              <p>Prof. Sujan Reddy</p>
+                              <p>10 weeks</p>
+                              <p>20 topics</p>
+                              <p>3 Students</p>
+                            </div>
                           </div>
 
                           <div className="course-actions">
-                            <Link to={`/course/${c.id}`} className="continue-btn">
-                              Details
-                            </Link>
+                            <button type="button" className="continue-btn" onClick={() => handleTutorChat(c.title)}>
+                              AI Tutor Chat
+                            </button>
+                            {String(c.title || "").toLowerCase().includes("java") && (
+                              <Link to="/java-progress" className="continue-btn" style={{ marginLeft: 8 }}>
+                                Java Progress
+                              </Link>
+                            )}
+                            {String(c.title || "").toLowerCase().includes("python") && (
+                              <Link to="/python-progress" className="continue-btn" style={{ marginLeft: 8 }}>
+                                Python Progress
+                              </Link>
+                            )}
                           </div>
                         </div>
                       </div>

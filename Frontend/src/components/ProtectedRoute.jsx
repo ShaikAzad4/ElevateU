@@ -7,7 +7,11 @@ const ProtectedRoute = ({ children }) => {
     <>
       <SignedIn>{children}</SignedIn>
       <SignedOut>
-        <RedirectToSignIn redirectUrl={window.location.pathname + window.location.search} />
+        <RedirectToSignIn
+          redirectUrl={window.location.pathname + window.location.search}
+          signInUrl="/login"
+          signUpUrl="/sign-up"
+        />
       </SignedOut>
     </>
   );

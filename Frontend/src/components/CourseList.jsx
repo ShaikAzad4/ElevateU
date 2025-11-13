@@ -129,7 +129,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Courses.css";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 const Courses = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -145,7 +145,7 @@ const Courses = () => {
     let ignore = false;
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/courses`);
+        const res = await fetch(`${API_BASE}/courses`);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to load courses");
 
@@ -200,7 +200,16 @@ const Courses = () => {
     }
     setEnrolling(courseId);
     try {
-      const res = await fetch(`${API_BASE}/api/enroll`, {
+      const name =
+        user.fullName || `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim();
+      const email = user.primaryEmailAddress?.emailAddress || null;
+      await fetch(`${API_BASE}/user/sync`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clerk_id: user.id, email, name }),
+      });
+
+      const res = await fetch(`${API_BASE}/enroll`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -212,8 +221,8 @@ const Courses = () => {
       if (!res.ok) {
         throw new Error(data?.error || "Failed to enroll");
       }
-      // success → go to MyCourse
-      navigate("/mycourse");
+      // success → go to MyCourse and highlight nav
+      navigate("/mycourse", { state: { highlightMyCourse: true } });
     } catch (e) {
       alert(e.message || "Failed to enroll");
     } finally {

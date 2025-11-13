@@ -155,6 +155,8 @@ body{
 
 .course-actions{display:flex; align-items:center; justify-content:flex-end; gap:.5rem}
 
+.form-grid{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:.5rem .8rem}
+
 /* ======= EMPTY ======= */
 .empty{
   background: repeating-linear-gradient(45deg, var(--brand-50), var(--brand-50) 10px, #fff 10px, #fff 20px);

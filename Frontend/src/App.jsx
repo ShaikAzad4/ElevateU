@@ -20,6 +20,9 @@ import CourseDetail from "./components/CourseDetails.jsx";
 import AfterAuth from "./components/AfterAuth.jsx";
 import Response from "./components/response.jsx";
 import AdminPage from "./components/AdminPage.jsx";
+import JavaProgress from "./components/JavaProgress.jsx";
+import PythonProgress from "./components/PythonProgress.jsx";
+import AiTutor from "./components/AiTutor.jsx";
 
 function App() {
   return (
@@ -74,6 +77,24 @@ function App() {
           <Route path="/admin" element={
             <ProtectedRoute>
             <AdminPage />
+            </ProtectedRoute>
+            } />
+
+          <Route path="/java-progress" element={
+            <ProtectedRoute>
+            <JavaProgress />
+            </ProtectedRoute>
+            } />
+
+          <Route path="/python-progress" element={
+            <ProtectedRoute>
+            <PythonProgress />
+            </ProtectedRoute>
+            } />
+
+          <Route path="/ai-tutor" element={
+            <ProtectedRoute>
+            <AiTutor />
             </ProtectedRoute>
             } />
 

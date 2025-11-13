@@ -11,6 +11,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
+      telemetry={false}
       appearance={{
         baseTheme: dark,
         variables: {

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 from models.enrollment import Enrollment
 from bson import ObjectId
+from models.progress_log import ProgressLog
 
 load_dotenv()
 
@@ -21,6 +22,8 @@ CORS(
     resources={r"/api/*": {"origins": [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]}},
@@ -34,7 +37,7 @@ CORS(
 @app.after_request
 def add_cors_headers(resp):
     origin = request.headers.get("Origin")
-    if origin in {"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000"}:
+    if origin in {"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174", "http://localhost:3000", "http://127.0.0.1:3000"}:
         resp.headers.setdefault("Access-Control-Allow-Origin", origin)
         resp.headers.setdefault("Vary", "Origin")
         resp.headers.setdefault("Access-Control-Allow-Headers", "Content-Type, Authorization")
@@ -339,6 +342,80 @@ def unenroll(enrollment_id):
         return jsonify({"error": "enrollment not found"}), 404
     en.delete()
     return jsonify({"message": "unenrolled"}), 200
+
+# ---------- ADMIN: STATS ----------
+@app.get("/api/admin/stats")
+def admin_stats():
+    users_count = User.objects.count()
+    courses_count = Course.objects.count()
+    enrollments_count = Enrollment.objects.count()
+    active_enrollments = Enrollment.objects(status="active").count()
+    completed_enrollments = Enrollment.objects(status="completed").count()
+    return jsonify({
+        "users": users_count,
+        "courses": courses_count,
+        "enrollments": enrollments_count,
+        "active_enrollments": active_enrollments,
+        "completed_enrollments": completed_enrollments,
+    }), 200
+
+# ---------- ADMIN: ENROLLMENTS ----------
+@app.get("/api/admin/enrollments")
+def admin_enrollments():
+    rows = []
+    qs = Enrollment.objects.select_related().order_by("-created_at")
+    for en in qs:
+        u = en.user
+        c = en.course
+        rows.append({
+            "id": str(en.id),
+            "status": en.status,
+            "created_at": en.created_at.isoformat(),
+            "user": {
+                "id": str(u.id) if u else None,
+                "name": u.name if u else None,
+                "email": str(u.email) if u else None,
+                "clerk_id": u.clerk_id if u else None,
+            },
+            "course": {
+                "id": str(c.id) if c else None,
+                "title": c.title if c else None,
+                "tutor": c.tutor if c else None,
+            }
+        })
+    return jsonify(rows), 200
+
+# ---------- MONITOR LOGS ----------
+@app.post("/api/monitor")
+def create_monitor_log():
+    data = request.get_json(silent=True) or {}
+    clerk_id = (data.get("clerk_id") or "").strip()
+    course = (data.get("course") or "").strip()
+    topic_key = (data.get("topic_key") or None)
+    topic_title = (data.get("topic_title") or None)
+    note = (data.get("note") or None)
+    if not clerk_id or not course:
+        return jsonify({"error": "clerk_id and course are required"}), 400
+    log = ProgressLog(
+        clerk_id=clerk_id,
+        course=course,
+        topic_key=topic_key,
+        topic_title=topic_title,
+        note=note,
+    ).save()
+    return jsonify(log.to_dict()), 201
+
+@app.get("/api/monitor")
+def list_monitor_logs():
+    clerk_id = (request.args.get("clerk_id") or "").strip()
+    course = (request.args.get("course") or "").strip()
+    q = ProgressLog.objects
+    if clerk_id:
+        q = q.filter(clerk_id=clerk_id)
+    if course:
+        q = q.filter(course=course)
+    logs = [x.to_dict() for x in q.order_by("-created_at").limit(100)]
+    return jsonify(logs), 200
 
 
 if __name__ == "__main__":

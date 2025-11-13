@@ -288,6 +288,23 @@
   width: 100%;
 }
 
+/* Underline indicator for active nav links */
+.nav a {
+  position: relative;
+  text-decoration: none;
+}
+.nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff9800, #ff6d00);
+  border-radius: 2px;
+  transition: width 0.25s ease;
+}
+
 /* Animation for course cards */
 @keyframes fadeInUp {
   from {
